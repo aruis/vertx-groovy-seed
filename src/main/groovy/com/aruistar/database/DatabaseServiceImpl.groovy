@@ -1,5 +1,6 @@
 package com.aruistar.database
 
+import com.aruistar.po.User
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.Handler
@@ -11,8 +12,9 @@ class DatabaseServiceImpl implements DatabaseService {
     }
 
     @Override
-    DatabaseService hello(int id, Handler<AsyncResult<String>> resultHandler) {
-        resultHandler.handle(Future.succeededFuture("hello $id"))
+    DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler) {
+        def user = new User("aruis", 29)
+        resultHandler.handle(Future.succeededFuture(user))
         return this
     }
 }

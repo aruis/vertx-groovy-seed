@@ -40,6 +40,7 @@ import io.vertx.serviceproxy.ProxyHandler;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 import com.aruistar.database.DatabaseService;
+import com.aruistar.po.User;
 import io.vertx.ext.asyncsql.AsyncSQLClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.AsyncResult;
@@ -123,7 +124,17 @@ public class DatabaseServiceVertxProxyHandler extends ProxyHandler {
       accessed();
       switch (action) {
         case "hello": {
-          service.hello(json.getValue("id") == null ? null : (json.getLong("id").intValue()), createHandler(msg));
+          service.hello(json.getValue("id") == null ? null : (json.getLong("id").intValue()), res -> {
+            if (res.failed()) {
+              if (res.cause() instanceof ServiceException) {
+                msg.reply(res.cause());
+              } else {
+                msg.reply(new ServiceException(-1, res.cause().getMessage()));
+              }
+            } else {
+              msg.reply(res.result() == null ? null : res.result().toJson());
+            }
+         });
           break;
         }
 

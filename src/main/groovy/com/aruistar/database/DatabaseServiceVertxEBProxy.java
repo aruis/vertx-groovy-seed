@@ -33,6 +33,7 @@ import io.vertx.serviceproxy.ProxyHelper;
 import io.vertx.serviceproxy.ServiceException;
 import io.vertx.serviceproxy.ServiceExceptionMessageCodec;
 import com.aruistar.database.DatabaseService;
+import com.aruistar.po.User;
 import io.vertx.ext.asyncsql.AsyncSQLClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.AsyncResult;
@@ -64,7 +65,7 @@ public class DatabaseServiceVertxEBProxy implements DatabaseService {
     } catch (IllegalStateException ex) {}
   }
 
-  public DatabaseService hello(int id, Handler<AsyncResult<String>> resultHandler) {
+  public DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler) {
     if (closed) {
       resultHandler.handle(Future.failedFuture(new IllegalStateException("Proxy is closed")));
       return this;
@@ -73,12 +74,12 @@ public class DatabaseServiceVertxEBProxy implements DatabaseService {
     _json.put("id", id);
     DeliveryOptions _deliveryOptions = (_options != null) ? new DeliveryOptions(_options) : new DeliveryOptions();
     _deliveryOptions.addHeader("action", "hello");
-    _vertx.eventBus().<String>send(_address, _json, _deliveryOptions, res -> {
+    _vertx.eventBus().<JsonObject>send(_address, _json, _deliveryOptions, res -> {
       if (res.failed()) {
         resultHandler.handle(Future.failedFuture(res.cause()));
       } else {
-        resultHandler.handle(Future.succeededFuture(res.result().body()));
-      }
+        resultHandler.handle(Future.succeededFuture(res.result().body() == null ? null : new User(res.result().body())));
+                      }
     });
     return this;
   }

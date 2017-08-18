@@ -1,5 +1,6 @@
 package com.aruistar.database;
 
+import com.aruistar.po.User;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;
@@ -11,7 +12,7 @@ import io.vertx.ext.asyncsql.AsyncSQLClient;
 public interface DatabaseService {
 
     @Fluent
-    DatabaseService hello(int id, Handler<AsyncResult<String>> resultHandler);
+    DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler);
 
     // (...)
     // end::interface[]
