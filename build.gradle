@@ -1,0 +1,69 @@
+buildscript {
+    ext {
+        vertx_version = '3.4.2'
+        groovy_version = '2.4.7'
+    }
+
+    repositories {
+        jcenter()
+    }
+
+}
+
+plugins {
+    id "net.ltgt.apt" version "0.11"
+    id 'java'
+    id 'groovy'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '1.2.4'
+}
+
+group 'com.aruistar'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+
+mainClassName = 'io.vertx.core.Launcher'
+def mainVerticleName = 'com.aruistar.MainVerticle'
+
+compileGroovy {
+    groovyOptions.javaAnnotationProcessing = true
+}
+
+repositories {
+    jcenter()
+}
+
+shadowJar {
+    classifier = 'fat'
+    manifest {
+        attributes 'Main-Verticle': mainVerticleName
+    }
+    mergeServiceFiles {
+        include 'META-INF/services/io.vertx.core.spi.VerticleFactory'
+    }
+
+    mergeGroovyExtensionModules()
+}
+
+
+dependencies {
+    compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+    compile "org.codehaus.groovy:groovy-all:$groovy_version"
+    compile "io.vertx:vertx-core:$vertx_version"
+    compile "io.vertx:vertx-lang-groovy:$vertx_version"
+    compile "io.vertx:vertx-web:$vertx_version"
+    compile "io.vertx:vertx-auth-jwt:$vertx_version"
+    compile "io.vertx:vertx-mysql-postgresql-client:$vertx_version"
+    compile "io.vertx:vertx-service-discovery:$vertx_version"
+    compile "io.vertx:vertx-service-proxy:$vertx_version"
+    apt "io.vertx:vertx-service-proxy:$vertx_version:processor"
+    compileOnly "io.vertx:vertx-codegen:$vertx_version"
+
+    apt "io.vertx:vertx-codegen:$vertx_version:processor"
+    compile "io.vertx:vertx-web-client:$vertx_version"
+
+
+    compile "org.hsqldb:hsqldb:2.3.4"
+
+}
