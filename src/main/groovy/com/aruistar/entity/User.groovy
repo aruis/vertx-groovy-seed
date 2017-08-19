@@ -8,21 +8,35 @@ class User {
     private String name
     private int age
 
+    String getName() {
+        return name
+    }
+
+    void setName(String name) {
+        this.name = name
+    }
+
+    int getAge() {
+        return age
+    }
+
+    void setAge(int age) {
+        this.age = age
+    }
+
     User(String name, int age) {
         this.name = name
         this.age = age
     }
 
     User(JsonObject user) {
-        this.name = user.getString("name")
-        this.age = user.getInteger("age")
+        UserConverter.fromJson(user, this)
     }
 
     JsonObject toJson() {
-        new JsonObject([
-                name: name,
-                age : age
-        ])
+        def json = new JsonObject()
+        UserConverter.toJson(this, json)
+        return json
     }
 
     @Override
