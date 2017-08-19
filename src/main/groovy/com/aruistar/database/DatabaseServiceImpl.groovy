@@ -1,6 +1,6 @@
 package com.aruistar.database
 
-import com.aruistar.po.User
+import com.aruistar.entity.User
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.Handler

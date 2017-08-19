@@ -30,6 +30,14 @@ compileGroovy {
     groovyOptions.javaAnnotationProcessing = true
 }
 
+sourceSets {
+    main {
+        groovy {
+            srcDirs += 'build/generated/source/apt/main/'
+        }
+    }
+}
+
 repositories {
     jcenter()
 }

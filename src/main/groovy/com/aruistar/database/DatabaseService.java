@@ -1,6 +1,6 @@
 package com.aruistar.database;
 
-import com.aruistar.po.User;
+import com.aruistar.entity.User;
 import io.vertx.codegen.annotations.Fluent;
 import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;

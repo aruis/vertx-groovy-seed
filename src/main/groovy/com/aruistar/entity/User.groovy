@@ -1,9 +1,9 @@
-package com.aruistar.po
+package com.aruistar.entity
 
 import io.vertx.codegen.annotations.DataObject
 import io.vertx.core.json.JsonObject
 
-@DataObject
+@DataObject(generateConverter = true)
 class User {
     private String name
     private int age
