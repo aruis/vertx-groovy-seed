@@ -14,18 +14,12 @@ public interface DatabaseService {
     @Fluent
     DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler);
 
-    // (...)
-    // end::interface[]
 
-    // tag::create[]
     static DatabaseService create(AsyncSQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
         return new DatabaseServiceImpl(dbClient, readyHandler);
     }
-    // end::create[]
 
-    // tag::proxy[]
     static DatabaseService createProxy(Vertx vertx, String address) {
         return new DatabaseServiceVertxEBProxy(vertx, address);
     }
-    // end::proxy[]
 }
