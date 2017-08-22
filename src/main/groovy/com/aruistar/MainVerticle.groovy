@@ -3,8 +3,10 @@ package com.aruistar
 import com.aruistar.database.DatabaseVerticle
 import com.aruistar.http.HttpVerticle
 import io.vertx.core.AbstractVerticle
+import io.vertx.core.DeploymentOptions
 import io.vertx.core.Future
 import io.vertx.core.Vertx
+import io.vertx.core.json.JsonObject
 
 class MainVerticle extends AbstractVerticle {
 
@@ -21,7 +23,7 @@ class MainVerticle extends AbstractVerticle {
         vertx.deployVerticle(DatabaseVerticle.newInstance(), { dbHandler ->
             if (dbHandler.succeeded()) {
 
-                vertx.deployVerticle(HttpVerticle.newInstance(), { httpHandler ->
+                vertx.deployVerticle(HttpVerticle.newInstance(), new DeploymentOptions().setConfig(new JsonObject([port: 8080])), { httpHandler ->
                     if (httpHandler.succeeded()) {
                         startFuture.complete()
                     }
