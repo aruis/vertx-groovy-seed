@@ -5,17 +5,25 @@ import com.aruistar.other.AruisLog
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.Handler
+import io.vertx.core.Vertx
 import io.vertx.core.json.JsonArray
+import io.vertx.core.json.JsonObject
+import io.vertx.ext.jdbc.JDBCClient
 import io.vertx.ext.sql.SQLClient
 import io.vertx.ext.sql.SQLConnection
 
 class DatabaseServiceImpl implements DatabaseService, AruisLog {
 
     SQLClient dbClient
+    Vertx vertx
 
-    DatabaseServiceImpl(SQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
+    DatabaseServiceImpl(Vertx vertx, JsonObject dbConfig, Handler<AsyncResult<DatabaseService>> readyHandler) {
 
-        this.dbClient = dbClient
+
+        this.vertx = vertx
+        dbClient = JDBCClient.createShared(vertx, dbConfig)
+
+
         dbClient.getConnection({ res ->
             if (res.succeeded()) {
                 SQLConnection connection = res.result()

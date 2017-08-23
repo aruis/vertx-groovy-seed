@@ -7,7 +7,7 @@ import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
-import io.vertx.ext.sql.SQLClient;
+import io.vertx.core.json.JsonObject;
 
 @ProxyGen
 public interface DatabaseService {
@@ -23,8 +23,8 @@ public interface DatabaseService {
     DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler);
 
 
-    static DatabaseService create(SQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
-        return new DatabaseServiceImpl(dbClient, readyHandler);
+    static DatabaseService create(Vertx vertx, JsonObject dbConfig, Handler<AsyncResult<DatabaseService>> readyHandler) {
+        return new DatabaseServiceImpl(vertx, dbConfig, readyHandler);
     }
 
     static DatabaseService createProxy(Vertx vertx, String address) {
