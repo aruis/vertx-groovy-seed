@@ -20,8 +20,7 @@ class MainVerticle extends AbstractVerticle implements AruisLog {
     @Override
     void start(Future<Void> startFuture) throws Exception {
 
-        log.info("hello")
-        println(config().toString())
+        log.info("config:" + config().toString())
 
         vertx.deployVerticle(DatabaseVerticle.newInstance(), { dbHandler ->
             if (dbHandler.succeeded()) {

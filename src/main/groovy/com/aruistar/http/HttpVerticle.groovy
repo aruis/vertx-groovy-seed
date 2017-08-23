@@ -1,6 +1,7 @@
 package com.aruistar.http
 
 import com.aruistar.database.DatabaseService
+import com.aruistar.entity.User
 import com.aruistar.other.AruisLog
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
@@ -17,19 +18,25 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
 
         int port = config().getInteger("port", 8080)
 
-        log.info("port is $port")
-
         HttpServer server = vertx.createHttpServer()
 
         Router router = Router.router(vertx)
 
         router.get("/").handler({ context ->
 
-            dbService.hello(1, { res ->
+            dbService.list({ res ->
                 context.response().end(res.result().toString())
 //                println(res.result())
             })
 
+
+        })
+
+        router.get("/add").handler({ context ->
+
+            dbService.addUser(new User("hello", 1), { res ->
+                context.response().end(res.result().toString())
+            })
 
         })
 
@@ -45,7 +52,5 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
             }
 
         })
-
-//        super.start(startFuture)
     }
 }

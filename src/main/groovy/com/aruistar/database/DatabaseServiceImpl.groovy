@@ -1,20 +1,73 @@
 package com.aruistar.database
 
 import com.aruistar.entity.User
+import com.aruistar.other.AruisLog
 import io.vertx.core.AsyncResult
 import io.vertx.core.Future
 import io.vertx.core.Handler
-import io.vertx.ext.asyncsql.AsyncSQLClient
+import io.vertx.core.json.JsonArray
+import io.vertx.ext.sql.SQLClient
+import io.vertx.ext.sql.SQLConnection
 
-class DatabaseServiceImpl implements DatabaseService {
-    DatabaseServiceImpl(AsyncSQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
-        readyHandler.handle(Future.succeededFuture(this))
+class DatabaseServiceImpl implements DatabaseService, AruisLog {
+
+    SQLClient dbClient
+
+    DatabaseServiceImpl(SQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
+
+        this.dbClient = dbClient
+        dbClient.getConnection({ res ->
+            if (res.succeeded()) {
+                SQLConnection connection = res.result()
+                connection.execute("create table if not exists User (id integer identity primary key, name varchar(80) , age integer )", { create ->
+                    connection.close();
+                    if (create.failed()) {
+                        log.error("Database preparation error", create.cause());
+                        readyHandler.handle(Future.failedFuture(create.cause()));
+                    } else {
+                        readyHandler.handle(Future.succeededFuture(this));
+                    }
+                })
+
+            }
+
+        })
+
+
     }
 
     @Override
     DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler) {
+
         def user = new User("aruis", 29)
         resultHandler.handle(Future.succeededFuture(user))
         return this
     }
+
+    @Override
+    DatabaseService list(Handler<AsyncResult<JsonArray>> resultHandler) {
+        dbClient.getConnection({ res ->
+            SQLConnection conn = res.result()
+            conn.query("select * from user", {
+                resultHandler.handle(Future.succeededFuture(new JsonArray(it.result().rows)))
+            })
+
+        })
+        return this
+    }
+
+    @Override
+    DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler) {
+        dbClient.getConnection({ res ->
+            SQLConnection conn = res.result()
+            conn.updateWithParams("insert into user values(NULL,?,?)", [user.name, user.age], {
+                resultHandler.handle(Future.succeededFuture(it.succeeded()))
+            })
+
+        })
+
+        return this
+    }
+
+
 }

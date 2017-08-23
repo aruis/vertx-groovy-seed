@@ -6,7 +6,8 @@ import io.vertx.codegen.annotations.ProxyGen;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.ext.asyncsql.AsyncSQLClient;
+import io.vertx.core.json.JsonArray;
+import io.vertx.ext.sql.SQLClient;
 
 @ProxyGen
 public interface DatabaseService {
@@ -14,8 +15,15 @@ public interface DatabaseService {
     @Fluent
     DatabaseService hello(int id, Handler<AsyncResult<User>> resultHandler);
 
+    @Fluent
+    DatabaseService list(Handler<AsyncResult<JsonArray>> resultHandler);
 
-    static DatabaseService create(AsyncSQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
+
+    @Fluent
+    DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler);
+
+
+    static DatabaseService create(SQLClient dbClient, Handler<AsyncResult<DatabaseService>> readyHandler) {
         return new DatabaseServiceImpl(dbClient, readyHandler);
     }
 

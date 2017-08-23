@@ -5,6 +5,15 @@ import io.vertx.core.json.JsonObject
 
 @DataObject(generateConverter = true)
 class User {
+    private int id
+
+    int getId() {
+        return id
+    }
+
+    void setId(int id) {
+        this.id = id
+    }
     private String name
     private int age
 
