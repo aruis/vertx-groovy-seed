@@ -3,21 +3,11 @@ package com.aruistar
 import com.aruistar.database.DatabaseVerticle
 import com.aruistar.http.HttpVerticle
 import com.aruistar.other.AruisLog
-import io.vertx.core.*
+import io.vertx.core.AbstractVerticle
+import io.vertx.core.DeploymentOptions
+import io.vertx.core.Future
 
 class MainVerticle extends AbstractVerticle implements AruisLog {
-
-//    static {
-//        Launcher.metaClass.beforeStartingVertx = { options ->
-//            log.error("hahahaha")
-//        }
-//    }
-
-    static void main(String[] args) {
-
-        Vertx.vertx().deployVerticle(MainVerticle.newInstance())
-
-    }
 
     @Override
     void start(Future<Void> startFuture) throws Exception {

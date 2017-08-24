@@ -66,6 +66,7 @@ class DatabaseServiceImpl implements DatabaseService, AruisLog {
 
     @Override
     DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler) {
+        sleep(12000)
         getConnection({ conn ->
 
             conn.updateWithParams("insert into user values(NULL,?,?)", [user.name, user.age], {
