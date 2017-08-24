@@ -23,7 +23,7 @@ version '1.0-SNAPSHOT'
 
 sourceCompatibility = '1.8'
 
-mainClassName = 'io.vertx.core.Launcher'
+mainClassName = 'com.aruistar.AruisLauncher'
 def mainVerticleName = 'com.aruistar.MainVerticle'
 
 compileGroovy {
