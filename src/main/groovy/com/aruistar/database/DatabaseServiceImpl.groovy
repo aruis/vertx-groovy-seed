@@ -67,8 +67,7 @@ class DatabaseServiceImpl implements DatabaseService, AruisLog {
     @Override
     DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler) {
         sleep(12000)
-        getConnection({ conn ->
-
+        getConnection({ SQLConnection conn ->
             conn.updateWithParams("insert into user values(NULL,?,?)", [user.name, user.age], {
                 resultHandler.handle(Future.succeededFuture(it.succeeded()))
             })
@@ -77,12 +76,11 @@ class DatabaseServiceImpl implements DatabaseService, AruisLog {
         return this
     }
 
-    void getConnection(Closure back) {
+    void getConnection(Closure<SQLConnection> back) {
 
         dbClient.getConnection({ res ->
             if (res.succeeded()) {
-                SQLConnection conn = res.result()
-                back(conn)
+                back(res.result())
             }
         })
     }
