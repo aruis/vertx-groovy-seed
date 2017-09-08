@@ -27,7 +27,7 @@ class FileTool implements AruisLog {
         this.host = host
     }
 
-    def downloadFile(String fileuuid, String filePath = "") {
+    File downloadFile(String fileuuid, String filePath = "") {
 
         def filename = new URL("$host/info/$fileuuid").text
         if (filename == "-1") {

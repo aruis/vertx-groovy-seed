@@ -14,6 +14,8 @@ import io.vertx.ext.web.handler.CorsHandler
 class HttpVerticle extends AbstractVerticle implements AruisLog {
 
 
+    String fileUploadsPath
+
     static whiteHosts = [
             "127.0.0.1"
     ]
@@ -21,7 +23,7 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
     @Override
     void start(Future<Void> startFuture) throws Exception {
         int port = config().getInteger("port", 6060)
-        String fileUploadsPath = config().getString("file-upload", "file-uploads")
+        fileUploadsPath = config().getString("file-upload", "file-uploads")
         config().getJsonArray("white-list", new JsonArray([])).each {
             whiteHosts << it
         }
@@ -71,9 +73,7 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
         router.get("/download/:uuid").handler({ routingContext ->
             def uuid = routingContext.request().getParam("uuid")
 
-            def dir = new File("$fileUploadsPath/")
-            File file
-            dir.eachFileMatch(~/$uuid.*/) { file = it }
+            File file = catchFile(uuid)
             if (file) {
                 def name = file.name
                 log.info("response file : $name")
@@ -89,12 +89,10 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
         router.get("/info/:uuid").handler({ routingContext ->
             def uuid = routingContext.request().getParam("uuid")
 
-            def dir = new File("$fileUploadsPath/")
-            File file
-            dir.eachFileMatch(~/$uuid.*/) { file = it }
+            File file = catchFile(uuid)
             if (file) {
                 def name = file.name
-                log.info("response file : $name")
+                log.info("info file : $name")
                 routingContext.response()
                         .putHeader('content-type', 'plain/text')
                         .end(name.substring(name.indexOf(".") + 1))
@@ -102,6 +100,21 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
                 routingContext.response().end("-1")
             }
 
+        })
+
+        router.get("/del/:uuid").handler({ routingContext ->
+            def uuid = routingContext.request().getParam("uuid")
+
+            File file = catchFile(uuid)
+            if (file) {
+                def name = file.name
+                file.delete()
+                log.info("del file : $name")
+                routingContext.response()
+                        .end("ok")
+            } else {
+                routingContext.response().end("-1")
+            }
 
         })
 
@@ -117,5 +130,12 @@ class HttpVerticle extends AbstractVerticle implements AruisLog {
             }
 
         })
+    }
+
+    File catchFile(String uuid) {
+        def dir = new File("$fileUploadsPath/")
+        File file
+        dir.eachFileMatch(~/$uuid.*/) { file = it }
+        return file
     }
 }
