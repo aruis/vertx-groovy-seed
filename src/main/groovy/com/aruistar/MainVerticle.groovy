@@ -1,6 +1,5 @@
 package com.aruistar
 
-import com.aruistar.database.DatabaseVerticle
 import com.aruistar.http.HttpVerticle
 import com.aruistar.other.AruisLog
 import io.vertx.core.AbstractVerticle
@@ -14,21 +13,12 @@ class MainVerticle extends AbstractVerticle implements AruisLog {
 
         log.info("config:" + config().toString())
 
-        vertx.deployVerticle(DatabaseVerticle.newInstance(), { dbHandler ->
-            if (dbHandler.succeeded()) {
-
-                vertx.deployVerticle(HttpVerticle.newInstance(), new DeploymentOptions().setConfig(config()), { httpHandler ->
-                    if (httpHandler.succeeded()) {
-                        startFuture.complete()
-                    }
-
-                })
-
-
+        vertx.deployVerticle(HttpVerticle.newInstance(), new DeploymentOptions().setConfig(config()), { httpHandler ->
+            if (httpHandler.succeeded()) {
+                startFuture.complete()
             }
 
         })
-
 
     }
 }

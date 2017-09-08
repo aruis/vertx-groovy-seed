@@ -61,15 +61,8 @@ dependencies {
     compile "io.vertx:vertx-core:$vertx_version"
     compile "io.vertx:vertx-lang-groovy:$vertx_version"
     compile "io.vertx:vertx-web:$vertx_version"
-    compile "io.vertx:vertx-jdbc-client:$vertx_version"
-    compile "io.vertx:vertx-auth-jwt:$vertx_version"
-    compile "io.vertx:vertx-mysql-postgresql-client:$vertx_version"
-    compile "io.vertx:vertx-service-discovery:$vertx_version"
-    compile "io.vertx:vertx-service-proxy:$vertx_version"
-    apt "io.vertx:vertx-service-proxy:$vertx_version:processor"
-    compileOnly "io.vertx:vertx-codegen:$vertx_version"
-    apt "io.vertx:vertx-codegen:$vertx_version:processor"
     compile "io.vertx:vertx-web-client:$vertx_version"
+
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile "org.hsqldb:hsqldb:2.3.4"
