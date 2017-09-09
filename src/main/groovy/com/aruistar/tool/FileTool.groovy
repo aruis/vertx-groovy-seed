@@ -6,7 +6,10 @@ import io.vertx.core.Future
 import io.vertx.core.Vertx
 import io.vertx.core.buffer.Buffer
 import io.vertx.ext.web.client.WebClient
-
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.impl.client.CloseableHttpClient
+import org.apache.http.impl.client.HttpClients
 
 class FileTool implements AruisLog {
 
@@ -54,7 +57,23 @@ class FileTool implements AruisLog {
         return file
     }
 
-    Future uploadFile(String filePath) {
+    HashMap uploadFile(File file) {
+
+        HttpPost post = new HttpPost("$host/upload");
+        MultipartEntityBuilder meb = MultipartEntityBuilder.create()
+
+        meb.addBinaryBody(file.name, file)
+
+        post.setEntity(meb.build())
+
+        CloseableHttpClient httpClient = HttpClients.createDefault()
+
+        def response = httpClient.execute(post)
+        def json = response.getEntity().getContent().getText()
+        return new JsonSlurper().parseText(json)
+    }
+
+    Future asyncUploadFile(String filePath) {
 
         Future future = Future.future()
         def client = WebClient.create(vertx)
