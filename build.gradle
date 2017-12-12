@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        vertx_version = '3.4.2'
+        vertx_version = '3.5.0'
         groovy_version = '2.4.7'
     }
 
@@ -61,8 +61,11 @@ dependencies {
     compile "io.vertx:vertx-core:$vertx_version"
     compile "io.vertx:vertx-lang-groovy:$vertx_version"
     compile "io.vertx:vertx-web:$vertx_version"
+    compile "io.vertx:vertx-hazelcast:$vertx_version"
+    compile "io.vertx:vertx-mqtt:$vertx_version"
     compile "io.vertx:vertx-jdbc-client:$vertx_version"
     compile "io.vertx:vertx-auth-jwt:$vertx_version"
+    compile "io.vertx:vertx-auth-shiro:$vertx_version"
     compile "io.vertx:vertx-mysql-postgresql-client:$vertx_version"
     compile "io.vertx:vertx-service-discovery:$vertx_version"
     compile "io.vertx:vertx-service-proxy:$vertx_version"
