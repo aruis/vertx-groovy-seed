@@ -1,7 +1,7 @@
 buildscript {
     ext {
         vertx_version = '3.5.0'
-        groovy_version = '2.4.7'
+        groovy_version = '2.4.13'
     }
 
     repositories {
@@ -11,7 +11,7 @@ buildscript {
 }
 
 plugins {
-    id "net.ltgt.apt" version "0.11"
+    id "net.ltgt.apt" version "0.13"
     id 'java'
     id 'groovy'
     id 'application'
