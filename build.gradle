@@ -1,7 +1,7 @@
 buildscript {
     ext {
-        vertx_version = '3.5.0'
-        groovy_version = '2.4.13'
+        vertx_version = '3.5.1'
+        groovy_version = '2.4.15'
     }
 
     repositories {
@@ -73,6 +73,7 @@ dependencies {
     compileOnly "io.vertx:vertx-codegen:$vertx_version"
     apt "io.vertx:vertx-codegen:$vertx_version:processor"
     compile "io.vertx:vertx-web-client:$vertx_version"
+    compile "io.vertx:vertx-zookeeper:$vertx_version"
 
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile "org.hsqldb:hsqldb:2.3.4"
