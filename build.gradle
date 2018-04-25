@@ -74,6 +74,8 @@ dependencies {
     apt "io.vertx:vertx-codegen:$vertx_version:processor"
     compile "io.vertx:vertx-web-client:$vertx_version"
 
+    compile 'io.reactiverse:reactive-pg-client:0.7.0'
+
     compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
     compile "org.hsqldb:hsqldb:2.3.4"
 

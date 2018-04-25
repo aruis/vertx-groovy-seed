@@ -3,7 +3,7 @@ package com.aruistar.database
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.json.JsonObject
-import io.vertx.serviceproxy.ProxyHelper
+import io.vertx.serviceproxy.ServiceBinder
 
 class DatabaseVerticle extends AbstractVerticle {
 
@@ -20,7 +20,10 @@ class DatabaseVerticle extends AbstractVerticle {
         DatabaseService.create(vertx, dbConfig, { ready ->
 
             if (ready.succeeded()) {
-                ProxyHelper.registerService(DatabaseService.class, vertx, ready.result(), "aruistar.database")
+
+                new ServiceBinder(vertx)
+                        .setAddress("aruistar.database")
+                        .register(DatabaseService.class, ready.result());
 
                 super.start(startFuture)
             } else {

@@ -55,10 +55,9 @@ class DatabaseServiceImpl implements DatabaseService, AruisLog {
     //TODO  优化connection的获取方法增加断路器
     @Override
     DatabaseService list(Handler<AsyncResult<JsonArray>> resultHandler) {
-        getConnection({ SQLConnection conn ->
-            conn.query("select * from user", {
-                resultHandler.handle(Future.succeededFuture(new JsonArray(it.result().rows)))
-            })
+
+        dbClient.query("select * from user", {
+            resultHandler.handle(Future.succeededFuture(new JsonArray(it.result().rows)))
         })
 
         return this
@@ -66,24 +65,11 @@ class DatabaseServiceImpl implements DatabaseService, AruisLog {
 
     @Override
     DatabaseService addUser(User user, Handler<AsyncResult<Boolean>> resultHandler) {
-        sleep(12000)
-        getConnection({ SQLConnection conn ->
-            conn.updateWithParams("insert into user values(NULL,?,?)", [user.name, user.age], {
-                resultHandler.handle(Future.succeededFuture(it.succeeded()))
-            })
+        dbClient.updateWithParams("insert into user values(NULL,?,?)", [user.name, user.age], {
+            resultHandler.handle(Future.succeededFuture(it.succeeded()))
         })
 
         return this
     }
-
-    void getConnection(Closure<SQLConnection> back) {
-
-        dbClient.getConnection({ res ->
-            if (res.succeeded()) {
-                back(res.result())
-            }
-        })
-    }
-
 
 }
